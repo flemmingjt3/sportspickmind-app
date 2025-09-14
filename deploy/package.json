@@ -1,0 +1,24 @@
+{
+  "name": "sportspickmind-deployment",
+  "version": "1.0.0",
+  "description": "Automated deployment scripts for SportsPickMind application",
+  "main": "deploy-all.js",
+  "scripts": {
+    "deploy": "node deploy-all.js",
+    "deploy:backend": "node render-deploy.js",
+    "deploy:frontend": "node vercel-deploy.js",
+    "list:services": "node render-deploy.js list"
+  },
+  "keywords": [
+    "deployment",
+    "render",
+    "vercel",
+    "automation",
+    "sportspickmind"
+  ],
+  "author": "SportsPickMind Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
