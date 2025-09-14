@@ -1,4 +1,4 @@
-const RealAIPredictionEngine = require('../../backend/utils/realAIPredictionEngine');
+const RealAIPredictionEngine = require('./aiPredictionEngine');
 const axios = require('axios');
 
 // Initialize the AI engine
