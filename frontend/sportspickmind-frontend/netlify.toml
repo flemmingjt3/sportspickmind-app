@@ -21,6 +21,18 @@
   directory = "api"
   node_bundler = "esbuild"
 
+# Enhanced security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+
+# Cache optimization
 [[headers]]
   for = "/static/*"
   [headers.values]
@@ -35,3 +47,78 @@
   for = "/*.css"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.woff2"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Environment variables for production
+[context.production.environment]
+  REACT_APP_API_URL = "https://sportspickmind.com/api"
+  REACT_APP_ENVIRONMENT = "production"
+  REACT_APP_ADSTERRA_HEADER_KEY = "12345678"
+  REACT_APP_ADSTERRA_SIDEBAR_KEY = "87654321"
+  REACT_APP_ADSTERRA_FOOTER_KEY = "11223344"
+  REACT_APP_ADSTERRA_MOBILE_KEY = "44332211"
+  REACT_APP_ADSTERRA_ARTICLE_KEY = "55667788"
+  REACT_APP_GA_TRACKING_ID = "G-XXXXXXXXXX"
+
+# Environment variables for preview deployments
+[context.deploy-preview.environment]
+  REACT_APP_API_URL = "https://deploy-preview-${REVIEW_ID}--sportspickmind.netlify.app/api"
+  REACT_APP_ENVIRONMENT = "preview"
+
+# Environment variables for branch deployments
+[context.branch-deploy.environment]
+  REACT_APP_API_URL = "https://${BRANCH}--sportspickmind.netlify.app/api"
+  REACT_APP_ENVIRONMENT = "development"
+
+# Build processing optimization
+[build.processing]
+  skip_processing = false
+
+[build.processing.css]
+  bundle = true
+  minify = true
+
+[build.processing.js]
+  bundle = true
+  minify = true
+
+[build.processing.html]
+  pretty_urls = true
+
+# Form handling
+[build.processing.forms]
+  enabled = true
+
+# Plugin configuration for SEO
+[[plugins]]
+  package = "@netlify/plugin-sitemap"
+
+[[plugins]]
+  package = "netlify-plugin-submit-sitemap"
+  [plugins.inputs]
+    baseUrl = "https://sportspickmind.com"
+    sitemapPath = "/sitemap.xml"
+    providers = [
+      "google",
+      "bing",
+      "yandex"
+    ]

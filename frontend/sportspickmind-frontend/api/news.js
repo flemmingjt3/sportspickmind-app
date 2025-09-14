@@ -1,4 +1,5 @@
-// Vercel Serverless Function for News API
+// Vercel Serverless Function for Real Sports News API
+// REAL DATA ONLY - NO PLACEHOLDERS OR MOCK DATA
 const Parser = require('rss-parser');
 
 const parser = new Parser({
@@ -7,22 +8,30 @@ const parser = new Parser({
   }
 });
 
-// RSS Feed URLs for different sports
+// Real RSS Feed URLs for different sports - NO MOCK DATA
 const RSS_FEEDS = {
   general: [
     'https://www.espn.com/espn/rss/news',
-    'https://bleacherreport.com/articles.rss'
+    'https://bleacherreport.com/articles.rss',
+    'https://www.cbssports.com/rss/headlines/',
+    'https://sports.yahoo.com/rss/'
   ],
   nfl: [
     'https://www.espn.com/espn/rss/nfl/news',
+    'https://www.cbssports.com/rss/headlines/nfl/',
+    'https://www.nfl.com/feeds/rss/news',
     'https://bleacherreport.com/nfl.rss'
   ],
   nba: [
     'https://www.espn.com/espn/rss/nba/news',
+    'https://www.cbssports.com/rss/headlines/nba/',
+    'https://www.nba.com/feeds/rss/news',
     'https://bleacherreport.com/nba.rss'
   ],
   mlb: [
     'https://www.espn.com/espn/rss/mlb/news',
+    'https://www.cbssports.com/rss/headlines/mlb/',
+    'https://www.mlb.com/feeds/rss/news',
     'https://bleacherreport.com/mlb.rss'
   ]
 };

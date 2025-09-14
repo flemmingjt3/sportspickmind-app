@@ -189,4 +189,9 @@ class Analytics {
 // Create singleton instance
 const analytics = new Analytics();
 
+// Initialize analytics function
+export const initializeAnalytics = () => {
+  analytics.init();
+};
+
 export default analytics;
