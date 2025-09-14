@@ -5,7 +5,7 @@ import './App.css';
 
 // Components
 import Navbar from './components/Navbar';
-import HomePage from './components/HomePage';
+import SimpleHomePage from './components/SimpleHomePage';
 import PredictionsPage from './components/PredictionsPage';
 import NewsPage from './components/NewsPage';
 import GamesPage from './components/GamesPage';
@@ -115,7 +115,7 @@ function App() {
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <HomePage />
+                    <SimpleHomePage />
                   </motion.div>
                 } />
                 
