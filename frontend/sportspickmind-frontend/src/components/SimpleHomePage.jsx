@@ -245,46 +245,16 @@ const SimpleHomePage = () => {
       <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Ready to Make Smarter Bets?
+            AI-Powered Sports Predictions
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Join thousands of users who trust our AI predictions for their sports betting decisions.
+            Get accurate predictions powered by advanced machine learning algorithms.
           </p>
           
-          {/* Affiliate Links */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <a 
-              href="https://sportsbook.draftkings.com/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="bg-white text-slate-900 px-6 py-3 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
-            >
-              DraftKings
-            </a>
-            <a 
-              href="https://sportsbook.fanduel.com/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="bg-white text-slate-900 px-6 py-3 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
-            >
-              FanDuel
-            </a>
-            <a 
-              href="https://sports.betmgm.com/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="bg-white text-slate-900 px-6 py-3 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
-            >
-              BetMGM
-            </a>
-            <a 
-              href="https://www.caesars.com/sportsbook" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="bg-white text-slate-900 px-6 py-3 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
-            >
-              Caesars
-            </a>
+          <div className="text-center">
+            <p className="text-white text-lg">
+              Make informed decisions with our AI analysis
+            </p>
           </div>
         </div>
       </section>
