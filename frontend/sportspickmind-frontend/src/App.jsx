@@ -1,111 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import './App.css';
 
 // Components
 import Navbar from './components/Navbar';
-import Sidebar from './components/Sidebar';
 import HomePage from './components/HomePage';
-import GamesPage from './components/GamesPage';
-import GameDetails from './components/GameDetails';
-import NewsPage from './components/NewsPage';
 import PredictionsPage from './components/PredictionsPage';
-import ProfilePage from './components/ProfilePage';
-import LoginPage from './components/LoginPage';
-import RegisterPage from './components/RegisterPage';
+import NewsPage from './components/NewsPage';
+import GamesPage from './components/GamesPage';
+import AboutPage from './components/AboutPage';
+import ContactPage from './components/ContactPage';
+import FAQPage from './components/FAQPage';
+import PrivacyPage from './components/PrivacyPage';
+import TermsPage from './components/TermsPage';
+import DisclaimerPage from './components/DisclaimerPage';
+import Footer from './components/Footer';
 import LoadingSpinner from './components/ui/LoadingSpinner';
 
 // Context
-import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 
 // Analytics
-import analytics from './utils/analytics';
-
-// Protected Route Component
-const ProtectedRoute = ({ children }) => {
-  const { user, loading } = useAuth();
-  
-  if (loading) {
-    return <LoadingSpinner />;
-  }
-  
-  return user ? children : <Navigate to="/login" />;
-};
-
-// Main App Layout
-const AppLayout = ({ children }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { user } = useAuth();
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
-      {/* Navigation */}
-      <Navbar 
-        onMenuClick={() => setSidebarOpen(!sidebarOpen)}
-        sidebarOpen={sidebarOpen}
-      />
-      
-      <div className="flex">
-        {/* Sidebar */}
-        <AnimatePresence>
-          {(sidebarOpen || (typeof window !== 'undefined' && window.innerWidth >= 1024)) && (
-            <Sidebar 
-              isOpen={sidebarOpen}
-              onClose={() => setSidebarOpen(false)}
-            />
-          )}
-        </AnimatePresence>
-        
-        {/* Main Content */}
-        <main className={`flex-1 transition-all duration-300 ${
-          sidebarOpen ? 'lg:ml-64' : 'lg:ml-0'
-        }`}>
-          <div className="pt-16"> {/* Account for fixed navbar */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              className="min-h-screen"
-            >
-              {children}
-            </motion.div>
-          </div>
-        </main>
-      </div>
-      
-      {/* Overlay for mobile sidebar */}
-      {sidebarOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-    </div>
-  );
-};
-
-// Auth Layout (for login/register pages)
-const AuthLayout = ({ children }) => {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-800 flex items-center justify-center p-4">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.95 }}
-        transition={{ duration: 0.3 }}
-        className="w-full max-w-md"
-      >
-        {children}
-      </motion.div>
-    </div>
-  );
-};
+import { initializeAnalytics } from './utils/analytics';
 
 // Loading Screen Component
 const LoadingScreen = () => {
@@ -130,7 +47,7 @@ const LoadingScreen = () => {
             className="w-20 h-20 mx-auto mb-4 bg-white rounded-full flex items-center justify-center shadow-2xl"
           >
             <span className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-              SM
+              🧠
             </span>
           </motion.div>
           <motion.h1
@@ -149,6 +66,14 @@ const LoadingScreen = () => {
           >
             AI-Powered Sports Predictions
           </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7 }}
+            className="text-blue-200 text-sm mt-2"
+          >
+            by Axiopistis Holdings
+          </motion.p>
         </div>
         <LoadingSpinner size="lg" />
       </motion.div>
@@ -159,14 +84,14 @@ const LoadingScreen = () => {
 function App() {
   const [loading, setLoading] = useState(true);
 
-  // Initialize analytics on app start
+  // Initialize analytics and app
   useEffect(() => {
-    analytics.init();
+    initializeAnalytics();
     
     // Simulate initial app loading
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 1500);
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -177,69 +102,127 @@ function App() {
 
   return (
     <ThemeProvider>
-      <AuthProvider>
-        <Router>
-          <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <Router>
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800">
+          <Navbar />
+          <main className="pt-16">
             <AnimatePresence mode="wait">
               <Routes>
-                {/* Auth Routes */}
-                <Route path="/login" element={
-                  <AuthLayout>
-                    <LoginPage />
-                  </AuthLayout>
-                } />
-                <Route path="/register" element={
-                  <AuthLayout>
-                    <RegisterPage />
-                  </AuthLayout>
-                } />
-                
-                {/* Main App Routes */}
                 <Route path="/" element={
-                  <AppLayout>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                  >
                     <HomePage />
-                  </AppLayout>
-                } />
-                
-                <Route path="/games" element={
-                  <AppLayout>
-                    <GamesPage />
-                  </AppLayout>
-                } />
-                
-                <Route path="/games/:gameId" element={
-                  <AppLayout>
-                    <GameDetails />
-                  </AppLayout>
-                } />
-                
-                <Route path="/news" element={
-                  <AppLayout>
-                    <NewsPage />
-                  </AppLayout>
+                  </motion.div>
                 } />
                 
                 <Route path="/predictions" element={
-                  <AppLayout>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                  >
                     <PredictionsPage />
-                  </AppLayout>
+                  </motion.div>
                 } />
                 
-                <Route path="/profile" element={
-                  <ProtectedRoute>
-                    <AppLayout>
-                      <ProfilePage />
-                    </AppLayout>
-                  </ProtectedRoute>
+                <Route path="/news" element={
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <NewsPage />
+                  </motion.div>
                 } />
                 
-                {/* Redirect unknown routes to home */}
-                <Route path="*" element={<Navigate to="/" replace />} />
+                <Route path="/games" element={
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <GamesPage />
+                  </motion.div>
+                } />
+                
+                <Route path="/about" element={
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <AboutPage />
+                  </motion.div>
+                } />
+                
+                <Route path="/contact" element={
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <ContactPage />
+                  </motion.div>
+                } />
+                
+                <Route path="/faq" element={
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <FAQPage />
+                  </motion.div>
+                } />
+                
+                <Route path="/privacy" element={
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <PrivacyPage />
+                  </motion.div>
+                } />
+                
+                <Route path="/terms" element={
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <TermsPage />
+                  </motion.div>
+                } />
+                
+                <Route path="/disclaimer" element={
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <DisclaimerPage />
+                  </motion.div>
+                } />
               </Routes>
             </AnimatePresence>
-          </div>
-        </Router>
-      </AuthProvider>
+          </main>
+          <Footer />
+        </div>
+      </Router>
     </ThemeProvider>
   );
 }

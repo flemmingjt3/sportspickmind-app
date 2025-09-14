@@ -1,44 +1,28 @@
-import { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Menu, 
   X, 
   Search, 
-  Bell, 
-  User, 
-  Settings, 
-  LogOut, 
   Sun, 
   Moon,
   TrendingUp,
-  Zap
+  Brain,
+  Calendar,
+  Newspaper,
+  Info,
+  Phone,
+  HelpCircle
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Badge } from '@/components/ui/badge';
-import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 
-const Navbar = ({ onMenuClick, sidebarOpen }) => {
-  const [searchOpen, setSearchOpen] = useState(false);
+const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [notifications, setNotifications] = useState([]);
   const [scrolled, setScrolled] = useState(false);
-  
-  const { user, logout, isAuthenticated } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
-  const navigate = useNavigate();
 
   // Handle scroll effect
   useEffect(() => {
@@ -50,30 +34,28 @@ const Navbar = ({ onMenuClick, sidebarOpen }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Mock notifications (will be replaced with real data)
-  useEffect(() => {
-    setNotifications([
-      { id: 1, title: 'Game Alert', message: 'Patriots vs Chiefs starts in 30 minutes', unread: true },
-      { id: 2, title: 'Prediction Result', message: 'Your Lakers prediction was correct!', unread: true },
-      { id: 3, title: 'News Update', message: 'Breaking: Trade deadline approaching', unread: false }
-    ]);
-  }, []);
+  const navigation = [
+    { name: 'Home', href: '/', icon: Brain },
+    { name: 'Predictions', href: '/predictions', icon: TrendingUp },
+    { name: 'Games', href: '/games', icon: Calendar },
+    { name: 'News', href: '/news', icon: Newspaper },
+  ];
+
+  const secondaryNavigation = [
+    { name: 'About', href: '/about', icon: Info },
+    { name: 'FAQ', href: '/faq', icon: HelpCircle },
+    { name: 'Contact', href: '/contact', icon: Phone },
+  ];
+
+  const isActive = (path) => location.pathname === path;
 
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
-      setSearchOpen(false);
-      setSearchQuery('');
+      // Implement search functionality
+      console.log('Searching for:', searchQuery);
     }
   };
-
-  const handleLogout = async () => {
-    await logout();
-    navigate('/');
-  };
-
-  const unreadCount = notifications.filter(n => n.unread).length;
 
   return (
     <motion.nav
@@ -86,88 +68,101 @@ const Navbar = ({ onMenuClick, sidebarOpen }) => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Left Section */}
-          <div className="flex items-center space-x-4">
-            {/* Menu Button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onMenuClick}
-              className="lg:hidden"
+        <div className="flex justify-between items-center h-16">
+          {/* Logo */}
+          <Link to="/" className="flex items-center space-x-3 group">
+            <motion.div
+              whileHover={{ scale: 1.05, rotate: 5 }}
+              whileTap={{ scale: 0.95 }}
+              className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow"
             >
-              <motion.div
-                animate={{ rotate: sidebarOpen ? 90 : 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-              </motion.div>
-            </Button>
+              <Brain className="w-6 h-6 text-white" />
+            </motion.div>
+            <div className="hidden sm:block">
+              <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                SportsPickMind
+              </h1>
+              <p className="text-xs text-slate-500 dark:text-slate-400 -mt-1">
+                by Axiopistis Holdings
+              </p>
+            </div>
+          </Link>
 
-            {/* Logo */}
-            <Link to="/" className="flex items-center space-x-2 group">
-              <motion.div
-                whileHover={{ scale: 1.05, rotate: 5 }}
-                whileTap={{ scale: 0.95 }}
-                className="relative"
-              >
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
-                  <TrendingUp className="h-6 w-6 text-white" />
-                  <motion.div
-                    className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full"
-                    animate={{ scale: [1, 1.2, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  >
-                    <Zap className="h-2 w-2 text-yellow-800 m-0.5" />
-                  </motion.div>
-                </div>
-              </motion.div>
-              <div className="hidden sm:block">
-                <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  SportsPickMind
-                </h1>
-                <p className="text-xs text-slate-500 dark:text-slate-400 -mt-1">
-                  by Axiopistis Holdings
-                </p>
-              </div>
-            </Link>
-          </div>
-
-          {/* Center Section - Search */}
+          {/* Search Bar - Desktop */}
           <div className="hidden md:flex flex-1 max-w-md mx-8">
-            <div className="relative w-full">
-              <form onSubmit={handleSearch} className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <Input
+            <form onSubmit={handleSearch} className="w-full relative">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <input
                   type="text"
-                  placeholder="Search teams, players, games..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-4 py-2 w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-full"
+                  placeholder="Search NFL, NBA, MLB teams, players, games..."
+                  className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 transition-all"
                 />
-              </form>
-            </div>
+              </div>
+            </form>
           </div>
 
-          {/* Right Section */}
-          <div className="flex items-center space-x-2">
-            {/* Mobile Search */}
-            <div className="md:hidden">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setSearchOpen(!searchOpen)}
-              >
-                <Search className="h-5 w-5" />
-              </Button>
-            </div>
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center space-x-1">
+            {navigation.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-2 ${
+                    isActive(item.href)
+                      ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span>{item.name}</span>
+                  {isActive(item.href) && (
+                    <motion.div
+                      layoutId="activeTab"
+                      className="absolute inset-0 bg-blue-100 dark:bg-blue-900/30 rounded-lg -z-10"
+                      initial={false}
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                    />
+                  )}
+                </Link>
+              );
+            })}
+            
+            {/* Separator */}
+            <div className="w-px h-6 bg-slate-300 dark:bg-slate-600 mx-2" />
+            
+            {/* Secondary Navigation */}
+            {secondaryNavigation.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className={`relative px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-1 ${
+                    isActive(item.href)
+                      ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
+                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
+                  }`}
+                >
+                  <Icon className="w-3 h-3" />
+                  <span>{item.name}</span>
+                </Link>
+              );
+            })}
+          </div>
 
+          {/* Theme Toggle & Mobile Menu */}
+          <div className="flex items-center space-x-2">
             {/* Theme Toggle */}
-            <Button
-              variant="ghost"
-              size="sm"
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={toggleTheme}
-              className="relative"
+              className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors"
             >
               <motion.div
                 initial={false}
@@ -175,128 +170,109 @@ const Navbar = ({ onMenuClick, sidebarOpen }) => {
                 transition={{ duration: 0.3 }}
               >
                 {theme === 'dark' ? (
-                  <Moon className="h-5 w-5" />
+                  <Sun className="w-5 h-5" />
                 ) : (
-                  <Sun className="h-5 w-5" />
+                  <Moon className="w-5 h-5" />
                 )}
               </motion.div>
-            </Button>
+            </motion.button>
 
-            {isAuthenticated ? (
-              <>
-                {/* Notifications */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm" className="relative">
-                      <Bell className="h-5 w-5" />
-                      {unreadCount > 0 && (
-                        <Badge 
-                          variant="destructive" 
-                          className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs"
-                        >
-                          {unreadCount}
-                        </Badge>
-                      )}
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-80">
-                    <DropdownMenuLabel>Notifications</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    {notifications.length > 0 ? (
-                      notifications.map((notification) => (
-                        <DropdownMenuItem key={notification.id} className="flex flex-col items-start p-3">
-                          <div className="flex items-center justify-between w-full">
-                            <span className="font-medium text-sm">{notification.title}</span>
-                            {notification.unread && (
-                              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                            )}
-                          </div>
-                          <span className="text-xs text-slate-500 mt-1">{notification.message}</span>
-                        </DropdownMenuItem>
-                      ))
-                    ) : (
-                      <DropdownMenuItem disabled>
-                        No notifications
-                      </DropdownMenuItem>
-                    )}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-
-                {/* User Menu */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src={user?.profile?.avatar} alt={user?.username} />
-                        <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-500 text-white">
-                          {user?.username?.charAt(0)?.toUpperCase() || 'U'}
-                        </AvatarFallback>
-                      </Avatar>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56">
-                    <DropdownMenuLabel className="font-normal">
-                      <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium leading-none">{user?.fullName || user?.username}</p>
-                        <p className="text-xs leading-none text-slate-500">{user?.email}</p>
-                      </div>
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                      <Link to="/profile" className="flex items-center">
-                        <User className="mr-2 h-4 w-4" />
-                        Profile
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/settings" className="flex items-center">
-                        <Settings className="mr-2 h-4 w-4" />
-                        Settings
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleLogout} className="text-red-600 dark:text-red-400">
-                      <LogOut className="mr-2 h-4 w-4" />
-                      Log out
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </>
-            ) : (
-              <div className="flex items-center space-x-2">
-                <Button variant="ghost" size="sm" asChild>
-                  <Link to="/login">Sign In</Link>
-                </Button>
-                <Button size="sm" asChild className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-                  <Link to="/register">Get Started</Link>
-                </Button>
-              </div>
-            )}
+            {/* Mobile Menu Button */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setIsOpen(!isOpen)}
+              className="lg:hidden p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
+            >
+              <motion.div
+                animate={{ rotate: isOpen ? 90 : 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                {isOpen ? (
+                  <X className="w-5 h-5" />
+                ) : (
+                  <Menu className="w-5 h-5" />
+                )}
+              </motion.div>
+            </motion.button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Search Overlay */}
+      {/* Mobile Menu */}
       <AnimatePresence>
-        {searchOpen && (
+        {isOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900"
+            transition={{ duration: 0.2 }}
+            className="lg:hidden bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700"
           >
-            <div className="p-4">
-              <form onSubmit={handleSearch} className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <Input
-                  type="text"
-                  placeholder="Search teams, players, games..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-4 py-2 w-full"
-                  autoFocus
-                />
+            <div className="px-4 py-4 space-y-2">
+              {/* Mobile Search */}
+              <form onSubmit={handleSearch} className="mb-4">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search NFL, NBA, MLB..."
+                    className="w-full pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400"
+                  />
+                </div>
               </form>
+
+              {/* Primary Navigation Links */}
+              <div className="space-y-1">
+                <h3 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-3 py-2">
+                  Main
+                </h3>
+                {navigation.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <Link
+                      key={item.name}
+                      to={item.href}
+                      onClick={() => setIsOpen(false)}
+                      className={`flex items-center space-x-3 px-3 py-3 rounded-lg text-base font-medium transition-colors ${
+                        isActive(item.href)
+                          ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
+                          : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
+                      }`}
+                    >
+                      <Icon className="w-5 h-5" />
+                      <span>{item.name}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+
+              {/* Secondary Navigation Links */}
+              <div className="space-y-1 pt-4 border-t border-slate-200 dark:border-slate-700">
+                <h3 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-3 py-2">
+                  More
+                </h3>
+                {secondaryNavigation.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <Link
+                      key={item.name}
+                      to={item.href}
+                      onClick={() => setIsOpen(false)}
+                      className={`flex items-center space-x-3 px-3 py-3 rounded-lg text-base font-medium transition-colors ${
+                        isActive(item.href)
+                          ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
+                          : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
+                      }`}
+                    >
+                      <Icon className="w-5 h-5" />
+                      <span>{item.name}</span>
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
           </motion.div>
         )}
