@@ -1,6 +1,6 @@
 [build]
   base = "frontend/sportspickmind-frontend"
-  publish = "frontend/sportspickmind-frontend/dist"
+  publish = "dist"
   command = "pnpm install && pnpm run build"
 
 [build.environment]
