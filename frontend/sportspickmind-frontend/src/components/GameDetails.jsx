@@ -20,6 +20,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import LoadingSpinner from './ui/LoadingSpinner';
+import { AffiliateSection, SidebarAd } from './ads/AdManager';
 
 const GameDetails = () => {
   const { gameId } = useParams();
@@ -283,6 +284,15 @@ const GameDetails = () => {
             </div>
           </CardContent>
         </Card>
+
+        {/* Affiliate Links Section */}
+        <AffiliateSection 
+          prediction={game.prediction} 
+          className="mb-8"
+        />
+
+        {/* Sidebar Ad */}
+        <SidebarAd className="mb-8" />
 
         {/* Detailed Analysis Tabs */}
         <Tabs defaultValue="stats" className="space-y-6">

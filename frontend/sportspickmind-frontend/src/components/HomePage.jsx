@@ -23,6 +23,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { useAuth } from '../contexts/AuthContext';
 import LoadingSpinner from './ui/LoadingSpinner';
+import { HeaderAd, SidebarAd, MobileAd, AffiliateSection } from './ads/AdManager';
 
 const HomePage = () => {
   const { user, isAuthenticated } = useAuth();
@@ -150,12 +151,17 @@ const HomePage = () => {
       <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-800 text-white">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center"
-          >
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="space-y-8"
+      >
+        {/* Header Ad */}
+        <HeaderAd className="mb-6" />
+        
+        {/* Mobile Ad */}
+        <MobileAd className="mb-4" />
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}

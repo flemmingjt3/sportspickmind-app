@@ -20,6 +20,9 @@ import LoadingSpinner from './components/ui/LoadingSpinner';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 
+// Analytics
+import analytics from './utils/analytics';
+
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -161,16 +164,18 @@ function App() {
           <LoadingSpinner size="lg" />
         </motion.div>
       </div>
-    );
-  }
+  function App() {
+  // Initialize analytics on app start
+  React.useEffect(() => {
+    analytics.init();
+  }, []);
 
   return (
     <ThemeProvider>
       <AuthProvider>
         <Router>
-          <div className="App">
-            <AnimatePresence mode="wait">
-              <Routes>
+          <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+            <Routes>
                 {/* Auth Routes */}
                 <Route path="/login" element={
                   <AuthLayout>
