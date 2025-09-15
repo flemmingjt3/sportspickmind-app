@@ -16,26 +16,12 @@ const WorkingPredictionsPage = () => {
       setLoading(true);
       setError(null);
 
-      // First fetch real games
-      const gamesResponse = await fetch('/.netlify/functions/realSportsData');
-      const gamesData = await gamesResponse.json();
+      // Fetch data from working JSON API
+      const response = await fetch('/api/live-data.json');
+      const data = await response.json();
 
-      if (gamesData.success && gamesData.games && gamesData.games.length > 0) {
-        // Then get predictions for those games
-        const predictionsResponse = await fetch('/.netlify/functions/groqPredictions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ games: gamesData.games })
-        });
-
-        const predictionsData = await predictionsResponse.json();
-        if (predictionsData.success) {
-          setPredictions(predictionsData.predictions || []);
-        } else {
-          setPredictions([]);
-        }
+      if (data.success && data.predictions) {
+        setPredictions(data.predictions || []);
       } else {
         setPredictions([]);
       }

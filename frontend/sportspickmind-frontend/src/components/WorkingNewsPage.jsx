@@ -17,7 +17,7 @@ const WorkingNewsPage = () => {
       setLoading(true);
       setError(null);
 
-      const response = await fetch('/.netlify/functions/sportsNews');
+      const response = await fetch('/api/live-data.json');
       const data = await response.json();
 
       if (data.success) {
