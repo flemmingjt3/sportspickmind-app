@@ -5,10 +5,10 @@ import './App.css';
 
 // Components
 import Navbar from './components/Navbar';
-import SimpleHomePage from './components/SimpleHomePage';
-import PredictionsPage from './components/PredictionsPage';
-import NewsPage from './components/NewsPage';
-import GamesPage from './components/GamesPage';
+import RealDataHomePage from './components/RealDataHomePage';
+import WorkingPredictionsPage from './components/WorkingPredictionsPage';
+import WorkingNewsPage from './components/WorkingNewsPage';
+import WorkingGamesPage from './components/WorkingGamesPage';
 import AboutPage from './components/AboutPage';
 import ContactPage from './components/ContactPage';
 import FAQPage from './components/FAQPage';
@@ -115,7 +115,7 @@ function App() {
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <SimpleHomePage />
+                    <RealDataHomePage />
                   </motion.div>
                 } />
                 
@@ -126,7 +126,7 @@ function App() {
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <PredictionsPage />
+                    <WorkingPredictionsPage />
                   </motion.div>
                 } />
                 
@@ -137,7 +137,7 @@ function App() {
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <NewsPage />
+                    <WorkingNewsPage />
                   </motion.div>
                 } />
                 
@@ -148,7 +148,7 @@ function App() {
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <GamesPage />
+                    <WorkingGamesPage />
                   </motion.div>
                 } />
                 
