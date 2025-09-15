@@ -18,26 +18,15 @@ const RealDataHomePage = () => {
       setError(null);
 
       // Fetch real games scheduled for today
-      const gamesResponse = await fetch('/.netlify/functions/realSportsData');
+      const gamesResponse = await fetch('/api/live-data.json');
       const gamesData = await gamesResponse.json();
 
       if (gamesData.success) {
         setRealGames(gamesData.games || []);
 
         if (gamesData.games && gamesData.games.length > 0) {
-          // Generate real AI predictions using Groq
-          const predictionsResponse = await fetch('/.netlify/functions/groqPredictions', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ games: gamesData.games })
-          });
-
-          const predictionsData = await predictionsResponse.json();
-          if (predictionsData.success) {
-            setPredictions(predictionsData.predictions || []);
-          }
+          // Use predictions from the same data source
+          setPredictions(gamesData.predictions || []);
         } else {
           setPredictions([]);
         }
